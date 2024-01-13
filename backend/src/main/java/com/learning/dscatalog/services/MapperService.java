@@ -4,7 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Service;
 
+import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
+import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
 
 
@@ -26,6 +28,10 @@ public class MapperService {
 
     public ProductDTO productToDto(Product product){
         return modelMapper.map(product, ProductDTO.class);
+    }
+
+    public CategoryDTO categoryToDto(Category category){
+        return modelMapper.map(category, CategoryDTO.class);
     }
 }
      
