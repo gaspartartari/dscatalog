@@ -1,7 +1,13 @@
 package com.learning.dscatalog.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CategoryDTO {
     private Long id;
+
+    @NotBlank(message = "Name canot be blank")
+    @Size(min = 10, message = "Name has to have at least 2 characters")
     private String name;
 
     public CategoryDTO(){

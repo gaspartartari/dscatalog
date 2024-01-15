@@ -31,4 +31,15 @@ public class CategoryService {
         Category cat = categoryRepository.findById(id).get();
         return mapper.categoryToDto(cat);
     }
+
+    public CategoryDTO insert(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        copyDtoToEntity(categoryDTO, category);
+        categoryRepository.save(category);
+        return mapper.categoryToDto(category);
+    }
+
+    private void copyDtoToEntity(CategoryDTO categoryDTO, Category category) {
+        category.setName(categoryDTO.getName());
+    }
 }
