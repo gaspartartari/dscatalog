@@ -32,11 +32,20 @@ public class CategoryService {
         return mapper.categoryToDto(cat);
     }
 
+    @Transactional
     public CategoryDTO insert(CategoryDTO categoryDTO) {
         Category category = new Category();
         copyDtoToEntity(categoryDTO, category);
         categoryRepository.save(category);
         return mapper.categoryToDto(category);
+    }
+
+    @Transactional
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
+        Category cat = categoryRepository.getReferenceById(id);
+        cat.setName(categoryDTO.getName());
+        categoryRepository.save(cat);
+        return mapper.categoryToDto(cat);
     }
 
     private void copyDtoToEntity(CategoryDTO categoryDTO, Category category) {
