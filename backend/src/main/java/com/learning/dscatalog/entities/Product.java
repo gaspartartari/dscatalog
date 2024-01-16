@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,6 +32,12 @@ public class Product {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant date;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     @ManyToMany
     @JoinTable(name = "tb_product_category", 
@@ -104,6 +112,24 @@ public class Product {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        updatedAt = Instant.now();
     }
 
     @Override
