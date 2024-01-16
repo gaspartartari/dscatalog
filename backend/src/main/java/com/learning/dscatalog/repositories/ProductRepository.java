@@ -10,8 +10,12 @@ import com.learning.dscatalog.entities.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     
-    @Query("SELECT obj FROM Product obj JOIN obj.categories cat WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%')) "
-            + "AND UPPER(cat.name) LIKE UPPER(CONCAT('%', :category, '%'))")
-    Page<Product> searchProductByNameAndOrCategory(String name, String category, Pageable pageable);
+    @Query( value = "SELECT p.name AS name, p.description, p.price, p.img_url as imgUrl, p.date, c.id AS categoryId, c.name AS categoryName  FROM tb_product p "
+            + "INNER JOIN tb_product_category pc ON p.id = pc.product_id "
+            + "INNER JOIN tb_category c ON c.id = pc.category_id "
+            + "WHERE UPPER(p.name) LIKE UPPER(CONCAT('%', 'pc', '%')) "
+            + "AND UPPER(c.name) LIKE UPPER(CONCAT('%', 'computer', '%')) "
+            + "ORDER BY p.id", nativeQuery = true)
+    Page<com.learning.dscatalog.projections.ProductProjection> searchProductByNameAndOrCategory(String name, String category, Pageable pageable);
     
 }

@@ -8,6 +8,7 @@ import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
+import com.learning.dscatalog.projections.ProductProjection;
 
 
 @Service
@@ -32,6 +33,10 @@ public class MapperService {
 
     public CategoryDTO categoryToDto(Category category){
         return modelMapper.map(category, CategoryDTO.class);
+    }
+
+    public ProductDTO productProjectionToDto(ProductProjection projection){
+        return modelMapper.map(projection, ProductDTO.class);
     }
 }
      

@@ -59,10 +59,6 @@ public class CategoryService {
         }
     }
 
-    private void copyDtoToEntity(CategoryDTO categoryDTO, Category category) {
-        category.setName(categoryDTO.getName());
-    }
-
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + id));
@@ -72,6 +68,9 @@ public class CategoryService {
         catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Integrity constraint violation");
         }
-        
+    }
+
+    private void copyDtoToEntity(CategoryDTO categoryDTO, Category category) {
+        category.setName(categoryDTO.getName());
     }
 }
