@@ -98,16 +98,16 @@ public class Product {
         this.imgUrl = imgUrl;
     }
 
-    public Set<Category> getCategories(){
-        return categories;
-    }
-
     public Instant getDate() {
         return date;
     }
 
     public void setDate(Instant date) {
         this.date = date;
+    }
+
+    public Set<Category> getCategories(){
+        return categories;
     }
 
     public void setCategories(Set<Category> categories) {

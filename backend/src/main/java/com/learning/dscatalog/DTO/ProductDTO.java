@@ -4,10 +4,21 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class ProductDTO {
     private Long id;
+
+    @NotBlank(message = "Name canot be blank")
+    @Size(min = 2, message = "Name has to have at least 2 characters")
     private String name;
     private String description;
+
+    @NotNull(message = "Price canot be null")
+    @Positive(message = "Price must be grater than 0.0")
     private Double price;
     private String imgUrl;
     private Instant date;
