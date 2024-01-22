@@ -1,9 +1,12 @@
 package com.learning.dscatalog.DTO;
 
+import com.learning.dscatalog.entities.Category;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CategoryDTO {
+
     private Long id;
 
     @NotBlank(message = "Name canot be blank")

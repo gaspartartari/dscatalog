@@ -9,13 +9,14 @@ import com.learning.dscatalog.entities.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    
-    @Query( value = "SELECT p.name AS name, p.description, p.price, p.img_url as imgUrl, p.date, c.id AS categoryId, c.name AS categoryName  FROM tb_product p "
-            + "INNER JOIN tb_product_category pc ON p.id = pc.product_id "
-            + "INNER JOIN tb_category c ON c.id = pc.category_id "
-            + "WHERE UPPER(p.name) LIKE UPPER(CONCAT('%', 'pc', '%')) "
-            + "AND UPPER(c.name) LIKE UPPER(CONCAT('%', 'computer', '%')) "
-            + "ORDER BY p.id", nativeQuery = true)
-    Page<com.learning.dscatalog.projections.ProductProjection> searchProductByNameAndOrCategory(String name, String category, Pageable pageable);
-    
+
+
+    @Query(value = "SELECT p FROM Product p JOIN FETCH p.categories c "
+            + "WHERE UPPER(p.name) LIKE UPPER(CONCAT('%', :name, '%')) "
+            + "AND UPPER(c.name) LIKE UPPER(CONCAT('%', :category, '%'))", 
+            countQuery = "SELECT COUNT(p) FROM Product p JOIN p.categories c "
+            + "WHERE UPPER(p.name) LIKE UPPER(CONCAT('%', :name, '%')) "
+            + "AND UPPER(c.name) LIKE UPPER(CONCAT('%', :category, '%'))")
+    Page<Product> searchProductByNameAndOrCategory(String name, String category, Pageable pageable);
+
 }
