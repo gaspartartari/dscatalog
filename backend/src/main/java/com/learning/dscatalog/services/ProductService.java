@@ -67,7 +67,8 @@ public class ProductService {
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
-        productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + id));
+        if(!productRepository.existsById(id))
+            throw new ResourceNotFoundException("Resource not found: " + id);
         try {
             productRepository.deleteById(id);
         } 
@@ -84,7 +85,7 @@ public class ProductService {
         product.setDate(productDTO.getDate());
         product.getCategories().clear();
         for (CategoryDTO catDto : productDTO.getCategories()){
-            Category cat = categoryRepository.getReferenceById(catDto.getId());
+            Category cat = categoryRepository.findById(catDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + catDto.getId()));
             product.getCategories().add(cat);
         }
     }

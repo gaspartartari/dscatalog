@@ -3,6 +3,7 @@ package com.learning.dscatalog.DTO;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -83,5 +84,10 @@ public class ProductDTO {
 
     public void setCategories(Set<CategoryDTO> categories) {
         this.categories = categories;
+    }
+
+    public BooleanSupplier empty() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'empty'");
     }
 }
