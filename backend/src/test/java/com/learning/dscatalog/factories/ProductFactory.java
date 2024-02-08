@@ -14,7 +14,7 @@ public class ProductFactory {
 
     public static Product createProduct(){
         
-        Product product = new Product(null, "New Product", "Description", 89.00, "www.imgurl.com", Instant.parse("2022-02-28T03:30:00Z"));
+        Product product = new Product(1L, "New Product", "Description", 89.00, "www.imgurl.com", Instant.parse("2022-02-28T03:30:00Z"));
         product.getCategories().add(new Category(1L, "Electronics"));
         return product;
     }

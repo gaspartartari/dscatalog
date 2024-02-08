@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.services.ProductService;
 
