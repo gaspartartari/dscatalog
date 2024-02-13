@@ -87,8 +87,5 @@ public class ProductServiceIT {
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
             productService.delete(nonExistingId);
         });
-
-
     }
-
 }

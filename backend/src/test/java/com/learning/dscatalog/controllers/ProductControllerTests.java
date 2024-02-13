@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.dscatalog.DTO.ProductDTO;
-import com.learning.dscatalog.entities.Product;
 import com.learning.dscatalog.factories.ProductFactory;
 import com.learning.dscatalog.services.ProductService;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
