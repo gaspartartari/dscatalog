@@ -85,7 +85,7 @@ public class ProductService {
         product.setDate(productDTO.getDate());
         product.getCategories().clear();
         for (CategoryDTO catDto : productDTO.getCategories()){
-            Category cat = categoryRepository.findById(catDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + catDto.getId()));
+            Category cat = categoryRepository.findById(catDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Category " + catDto.getId() + " not found"));
             product.getCategories().add(cat);
         }
     }

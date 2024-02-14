@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
+import com.learning.dscatalog.DTO.UserDTO;
 import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
+import com.learning.dscatalog.entities.User;
 import com.learning.dscatalog.projections.ProductProjection;
 
 
@@ -19,12 +21,18 @@ public class MapperService {
     public MapperService(ModelMapper modelMapper){
         this.modelMapper = modelMapper;
         configureProductMappings();
+        configureUserMappings();
 
     }
 
     private void configureProductMappings() {
         TypeMap<Product, ProductDTO> productTypeMap = modelMapper.createTypeMap(Product.class, ProductDTO.class);
         productTypeMap.addMapping(x -> x.getCategories(), ProductDTO :: setCategories);
+    }
+
+    private void configureUserMappings() {
+        TypeMap<User, UserDTO> userTypeMap = modelMapper.createTypeMap(User.class, UserDTO.class);
+        userTypeMap.addMapping(x -> x.getRoles(), UserDTO :: setRoles);
     }
 
     public ProductDTO productToDto(Product product){
@@ -37,6 +45,10 @@ public class MapperService {
 
     public ProductDTO productProjectionToDto(ProductProjection projection){
         return modelMapper.map(projection, ProductDTO.class);
+    }
+
+    public UserDTO userToDto(User user){
+        return modelMapper.map(user, UserDTO.class);
     }
 }
      

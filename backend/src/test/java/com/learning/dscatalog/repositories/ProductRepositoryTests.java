@@ -31,7 +31,7 @@ public class ProductRepositoryTests {
     public void deleteByIdShouldDeleteProductWhenIdExists(){
         
         productRepository.deleteById(existingId);
-        Optional productIfExists = productRepository.findById(existingId);
+        Optional<Product> productIfExists = productRepository.findById(existingId);
         Assertions.assertFalse(productIfExists.isPresent());   
     }
 
@@ -49,14 +49,14 @@ public class ProductRepositoryTests {
     @Test
     public void findByIdShouldReturnNotEmptyIfIdExists(){
 
-        Optional product = productRepository.findById(existingId);
+        Optional<Product> product = productRepository.findById(existingId);
         Assertions.assertNotNull(product);
     }
 
     @Test
     public void findByIdShouldReturnEmptyIfIdDoesNotExists(){
 
-        Optional product = productRepository.findById(nonExistingId);
+        Optional<Product> product = productRepository.findById(nonExistingId);
         Assertions.assertFalse(product.isPresent());
     }
 }
