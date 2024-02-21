@@ -2,6 +2,7 @@ package com.learning.dscatalog.DTO;
 
 public class RoleDTO {
     
+    
     private Long id;
     private String authority;
 

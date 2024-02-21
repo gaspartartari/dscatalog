@@ -1,14 +1,17 @@
 package com.learning.dscatalog.DTO;
 
-public class UserLoginDTO extends UserDTO {
+import com.learning.dscatalog.services.validations.UserInsertValid;
+
+@UserInsertValid
+public class UserInsertDTO extends UserDTO {
     
     private String password;
 
-    public UserLoginDTO(){
+    public UserInsertDTO(){
 
     }
 
-    public UserLoginDTO(String password) {
+    public UserInsertDTO(String password) {
         super();
         this.password = password;
     }

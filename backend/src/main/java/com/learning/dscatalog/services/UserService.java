@@ -1,6 +1,5 @@
 package com.learning.dscatalog.services;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.learning.dscatalog.DTO.RoleDTO;
 import com.learning.dscatalog.DTO.UserDTO;
-import com.learning.dscatalog.DTO.UserLoginDTO;
+import com.learning.dscatalog.DTO.UserInsertDTO;
 import com.learning.dscatalog.entities.Role;
 import com.learning.dscatalog.entities.User;
 import com.learning.dscatalog.repositories.RoleRepository;
@@ -21,6 +20,7 @@ import com.learning.dscatalog.services.exceptions.DatabaseException;
 import com.learning.dscatalog.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+
 
 @Service
 public class UserService {
@@ -51,7 +51,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserLoginDTO userLoginDTO) {
+    public UserDTO insert(UserInsertDTO userLoginDTO) {
         User user = new User();
         copyDtoToEntity(userLoginDTO, user);
         user.setPassword(passwordEncoder.encode((userLoginDTO).getPassword()));

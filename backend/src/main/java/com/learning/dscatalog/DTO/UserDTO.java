@@ -3,11 +3,21 @@ package com.learning.dscatalog.DTO;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.validation.constraints.NotEmpty;
+
+
+
 public class UserDTO {
     
     private Long id;
+
+    @NotEmpty(message = "Name cannot be empty")
     private String firstName;
+
+    @NotEmpty(message = "Last name cannot be empty")
     private String lastName;
+
+    @NotEmpty(message = "Last name cannot be empty")
     private String email;
 
     private Set<RoleDTO> roles = new HashSet<>();
