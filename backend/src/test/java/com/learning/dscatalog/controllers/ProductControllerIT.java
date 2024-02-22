@@ -17,14 +17,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learning.dscatalog.TokenUtil;
 import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.factories.ProductFactory;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class ProductControllerIT {
 
     @Autowired
@@ -33,26 +36,33 @@ public class ProductControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
     private Long existingId;
     private Long nonExistingId;
     private Long countTotalProducts;
     private Long countTotalProductsFromComputerCategory;
-
+    private String username, password, bearerToken;
 
     @BeforeEach
-    void setup() throws Exception{
-       
+    void setup() throws Exception {
+
         existingId = 1l;
         nonExistingId = 10000L;
         countTotalProducts = 25L;
         countTotalProductsFromComputerCategory = 23L;
+
+        username = "maria@gmail.com";
+        password = "123456";
+        bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
     }
 
     @Test
     public void findAllShouldReturnSortedPageWhenSortByName() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/products?sort=name,asc")
-            .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.totalElements").value(countTotalProducts));
@@ -63,15 +73,16 @@ public class ProductControllerIT {
     }
 
     @Test
-    public void findAllShouldReturnPageWithProductsOfComputerCategoryWhenSortByCategoryParamIsComputer() throws Exception {
+    public void findAllShouldReturnPageWithProductsOfComputerCategoryWhenSortByCategoryParamIsComputer()
+            throws Exception {
 
         ResultActions result = mockMvc.perform(get("/products?category=computers")
-            .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.totalElements").value(countTotalProductsFromComputerCategory));
         result.andExpect(jsonPath("$.content").exists());
-       
+
     }
 
     @Test
@@ -84,7 +95,7 @@ public class ProductControllerIT {
         Double expectedPrice = productDto.getPrice();
         Set<CategoryDTO> expectedCategories = productDto.getCategories();
         List<String> expectedCategoriesName = new ArrayList<>();
-        for(CategoryDTO cat : expectedCategories){
+        for (CategoryDTO cat : expectedCategories) {
             String catName = cat.getName();
             expectedCategoriesName.add(catName);
         }
@@ -92,6 +103,7 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDto);
 
         ResultActions result = mockMvc.perform(put("/products/{id}", existingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -111,12 +123,11 @@ public class ProductControllerIT {
         String jsonBody = objectMapper.writeValueAsString(productDto);
 
         ResultActions result = mockMvc.perform(put("/products/{id}", nonExistingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .content(jsonBody)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isNotFound());
-
     }
-
 }
