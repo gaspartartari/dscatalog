@@ -1,5 +1,8 @@
 package com.learning.dscatalog.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -26,9 +29,9 @@ public class CategoryService {
     private MapperService mapper;
 
     @Transactional(readOnly = true)
-    public Page<CategoryDTO> findAll(Pageable pageable){
-        Page<Category> categories = categoryRepository.findAll(pageable);
-        return categories.map(x -> mapper.categoryToDto(x));
+    public List<CategoryDTO> findAll(){
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream().map(cat -> mapper.categoryToDto(cat)).toList();
     }
 
     @Transactional(readOnly = true)

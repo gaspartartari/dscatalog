@@ -1,6 +1,8 @@
 package com.learning.dscatalog.controllers;
 
 import java.net.URI;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +31,9 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-     public ResponseEntity<Page<CategoryDTO>>findAll(Pageable pageable){
+     public ResponseEntity<List<CategoryDTO>>findAll( ){
 
-        Page<CategoryDTO> dto = categoryService.findAll(pageable);
+        List<CategoryDTO> dto = categoryService.findAll();
         return ResponseEntity.ok().body(dto);
     }
 
