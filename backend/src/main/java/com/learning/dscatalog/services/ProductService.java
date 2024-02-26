@@ -22,6 +22,7 @@ import com.learning.dscatalog.repositories.CategoryRepository;
 import com.learning.dscatalog.repositories.ProductRepository;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
 import com.learning.dscatalog.services.exceptions.ResourceNotFoundException;
+import com.learning.dscatalog.utils.Util;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -48,6 +49,7 @@ public class ProductService {
         Page<ProductProjection> projection = productRepository.searchProductByNameAndOrCategory(name, categoryIdsList, pageable);
         List<Long> productIds = projection.map(x -> x.getId()).toList();
         List<Product> products = productRepository.searchProductsWithCategories(productIds);
+        products = Util.sortList(projection.getContent(), products);
         List<ProductDTO> dtos = products.stream().map(x -> mapper.productToDto(x)).toList();
         Page<ProductDTO> result = new PageImpl<>(dtos, projection.getPageable(), projection.getTotalElements());
         
