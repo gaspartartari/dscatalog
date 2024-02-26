@@ -2,12 +2,14 @@ package com.learning.dscatalog.factories;
 
 import java.time.Instant;
 
+import org.mockito.Mockito;
 import org.springframework.beans.BeanUtils;
 
 import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
+import com.learning.dscatalog.projections.ProductProjection;
 
 public class ProductFactory {
 

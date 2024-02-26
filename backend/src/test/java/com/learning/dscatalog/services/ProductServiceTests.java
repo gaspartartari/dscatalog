@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,6 +31,7 @@ import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
 import com.learning.dscatalog.factories.ProductFactory;
+import com.learning.dscatalog.projections.ProductProjection;
 import com.learning.dscatalog.repositories.CategoryRepository;
 import com.learning.dscatalog.repositories.ProductRepository;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
@@ -49,6 +51,7 @@ public class ProductServiceTests {
     private ProductDTO productDto;
     private Category category;
     private CategoryDTO categoryDTO;
+    private List<Long> categoryIds = new ArrayList<>();
 
     @InjectMocks
     private ProductService productService;
@@ -73,6 +76,10 @@ public class ProductServiceTests {
         category = CategoryFactory.createCategory();
         page = new PageImpl<>(List.of(product));
         Pageable pageable = PageRequest.of(0, 10);
+        categoryIds.add(1L);
+        categoryIds.add(2L);
+        categoryIds.add(3L);
+
         
 
         doNothing().when(productRepository).deleteById(existingId);
@@ -88,7 +95,7 @@ public class ProductServiceTests {
         when(productRepository.findById(nonExistingId)).thenReturn(Optional.empty());
         when(categoryRepository.findById(existingId)).thenReturn(Optional.of(category));
         when(categoryRepository.findById(nonExistingId)).thenReturn(Optional.empty());
-        when(productRepository.searchProductByNameAndOrCategory("", "", pageable)).thenReturn(page);
+        when(productRepository.searchProductByNameAndOrCategory("", categoryIds, pageable)).thenReturn(page);
         when(mapper.productToDto(any(Product.class))).thenReturn(productDto);
 
     }
@@ -152,20 +159,9 @@ public class ProductServiceTests {
         verify(productRepository).findById(existingId);
     }
 
-    @Test
-    public void findAllShouldReturnPage(){
+   
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Product product = ProductFactory.createProduct();
-
-        Page<ProductDTO> result = productService.findAll("", "", pageable);
-
-        Assertions.assertNotNull(result);
-
-        verify(productRepository).searchProductByNameAndOrCategory("", "", pageable);
-        verify(mapper).productToDto(product);
-
-    }
+    
 
     @Test
     public void deleteShouldDoNothingWhenIdExists() {

@@ -43,10 +43,11 @@ public class ProductServiceIT {
     public void findAllShouldReturnPageWhenPageIs0andSizeIs10(){
 
         String name = "";
-        String category = "";
+        String exsistingCategoryIds = "1,2,3";
+
         PageRequest pageRequest = PageRequest.of(2, 10);
 
-        Page<ProductDTO> result = productService.findAll(name, category, pageRequest);
+        Page<ProductDTO> result = productService.findAll(name, exsistingCategoryIds, pageRequest);
 
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(2, result.getNumber());
@@ -59,10 +60,10 @@ public class ProductServiceIT {
     public void findAllShouldReturnSortedPageWhenSortByName(){
 
         String name = "";
-        String category = "";
+        String exsistingCategoryIds = "1,2,3";
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
 
-        Page<ProductDTO> result = productService.findAll(name, category, pageRequest);
+        Page<ProductDTO> result = productService.findAll(name, exsistingCategoryIds, pageRequest);
 
         Assertions.assertFalse(result.isEmpty());
         Assertions.assertEquals(0, result.getNumber());

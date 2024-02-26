@@ -1,8 +1,13 @@
 package com.learning.dscatalog.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,6 +17,7 @@ import com.learning.dscatalog.DTO.CategoryDTO;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.entities.Category;
 import com.learning.dscatalog.entities.Product;
+import com.learning.dscatalog.projections.ProductProjection;
 import com.learning.dscatalog.repositories.CategoryRepository;
 import com.learning.dscatalog.repositories.ProductRepository;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
@@ -33,9 +39,19 @@ public class ProductService {
     private MapperService mapper;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, String category, Pageable pageable) {
-        Page<Product> products = productRepository.searchProductByNameAndOrCategory(name, category, pageable);
-        return products.map(x -> mapper.productToDto(x));
+    public Page<ProductDTO> findAll(String name, String categoryIds, Pageable pageable) {
+        
+        List<Long> categoryIdsList = Arrays.asList();
+        if(!"0".equals(categoryIds))
+            categoryIdsList = Arrays.asList(categoryIds.split(",")).stream().map(x -> Long.parseLong(x)).toList();
+        
+        Page<ProductProjection> projection = productRepository.searchProductByNameAndOrCategory(name, categoryIdsList, pageable);
+        List<Long> productIds = projection.map(x -> x.getId()).toList();
+        List<Product> products = productRepository.searchProductsWithCategories(productIds);
+        List<ProductDTO> dtos = products.stream().map(x -> mapper.productToDto(x)).toList();
+        Page<ProductDTO> result = new PageImpl<>(dtos, projection.getPageable(), projection.getTotalElements());
+        
+        return result;
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,7 @@
 package com.learning.dscatalog.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.learning.dscatalog.DTO.ProductDTO;
+import com.learning.dscatalog.projections.ProductProjection;
 import com.learning.dscatalog.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -34,9 +36,9 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> findAll(
             @RequestParam(name = "name", defaultValue = "") String name, 
-            @RequestParam(name = "category", defaultValue = "") String category, 
+            @RequestParam(name = "categoryIds", defaultValue = "0") String categoryIds, 
             Pageable pageable){
-        Page<ProductDTO> dto = productService.findAll(name, category, pageable);
+        Page<ProductDTO> dto = productService.findAll(name, categoryIds, pageable);
         return ResponseEntity.ok(dto);
     }
 

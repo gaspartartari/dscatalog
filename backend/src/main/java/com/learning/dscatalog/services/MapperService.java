@@ -35,8 +35,8 @@ public class MapperService {
         userTypeMap.addMapping(x -> x.getRoles(), UserDTO :: setRoles);
     }
 
-    public ProductDTO productToDto(Product product){
-        return modelMapper.map(product, ProductDTO.class);
+    public ProductDTO productToDto(Product x){
+        return modelMapper.map(x, ProductDTO.class);
     }
 
     public CategoryDTO categoryToDto(Category category){

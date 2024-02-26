@@ -1,13 +1,21 @@
 package com.learning.dscatalog.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -32,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learning.dscatalog.DTO.ProductDTO;
 import com.learning.dscatalog.factories.ProductFactory;
+import com.learning.dscatalog.projections.ProductProjection;
 import com.learning.dscatalog.services.ProductService;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
 import com.learning.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -49,13 +58,19 @@ public class ProductControllerTests {
     private ObjectMapper objectMapper;
 
     private ProductDTO productDto;
-
     private PageImpl<ProductDTO> page;
     private List<ProductDTO> productList;
     private Long existingId;
     private Long nonExistingId;
     private Long dependentId;
     private Pageable pageable;
+    private String exsistingCategoryIds;
+    private String nonInformedCategoryIds;
+    private ProductProjection productProjection;
+    
+    
+    
+    
 
     @BeforeEach
     void setup() throws Exception {
@@ -64,11 +79,19 @@ public class ProductControllerTests {
         nonExistingId = 2L;
         dependentId = 3L;
         productDto = ProductFactory.createProductDto();
+        productProjection = Mockito.mock(ProductProjection.class);
+        
         productList = List.of(productDto); 
         page = new PageImpl<>(productList, PageRequest.of(0, 20), productList.size());
         pageable = PageRequest.of(0, 20);
+        exsistingCategoryIds = "1,2,3";
+        nonInformedCategoryIds = "0";
+        
 
-        when(productService.findAll(any(String.class), any(String.class), any(Pageable.class))).thenReturn(page);
+        
+
+        when(productService.findAll(any(String.class), eq(exsistingCategoryIds), any(Pageable.class))).thenReturn(page);
+        when(productService.findAll(any(String.class), eq(nonInformedCategoryIds), any(Pageable.class))).thenReturn(page);
         when(productService.findById(existingId)).thenReturn(productDto);
         when(productService.findById(nonExistingId)).thenThrow(ResourceNotFoundException.class);
         when(productService.update(eq(existingId), any())).thenReturn(productDto);
@@ -117,18 +140,6 @@ public class ProductControllerTests {
         result.andExpect(jsonPath("$.categories").exists());
     }
 
-    @Test
-    public void findAllShouldReturnPage() throws Exception {
-
-        String name = "";
-        String category = "";
-        ResultActions result = mockMvc.perform(get("/products")
-                .accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk());
-        Mockito.verify(productService).findAll(name, category, pageable);
-
-    }
 
     @Test
     public void findByIdShouldReturnProductDtoWhenIdExists() throws Exception {

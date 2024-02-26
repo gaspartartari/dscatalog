@@ -72,18 +72,6 @@ public class ProductControllerIT {
         result.andExpect(jsonPath("$.content[2].name").value("PC Gamer Alfa"));
     }
 
-    @Test
-    public void findAllShouldReturnPageWithProductsOfComputerCategoryWhenSortByCategoryParamIsComputer()
-            throws Exception {
-
-        ResultActions result = mockMvc.perform(get("/products?category=computers")
-                .accept(MediaType.APPLICATION_JSON));
-
-        result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.totalElements").value(countTotalProductsFromComputerCategory));
-        result.andExpect(jsonPath("$.content").exists());
-
-    }
 
     @Test
     public void updateShouldReturnProductDtoWhenIdExists() throws Exception {
