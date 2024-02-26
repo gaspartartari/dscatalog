@@ -39,6 +39,7 @@ public class ProductService {
     @Autowired
     private MapperService mapper;
 
+    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(String name, String categoryIds, Pageable pageable) {
         
@@ -49,7 +50,7 @@ public class ProductService {
         Page<ProductProjection> projection = productRepository.searchProductByNameAndOrCategory(name, categoryIdsList, pageable);
         List<Long> productIds = projection.map(x -> x.getId()).toList();
         List<Product> products = productRepository.searchProductsWithCategories(productIds);
-        products = Util.sortList(projection.getContent(), products);
+        products = (List<Product>) Util.sortList(projection.getContent(), products);
         List<ProductDTO> dtos = products.stream().map(x -> mapper.productToDto(x)).toList();
         Page<ProductDTO> result = new PageImpl<>(dtos, projection.getPageable(), projection.getTotalElements());
         
