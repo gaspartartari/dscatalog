@@ -1,14 +1,17 @@
 package com.learning.dscatalog.services;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.learning.dscatalog.DTO.EmailDTO;
+import com.learning.dscatalog.DTO.NewPasswordDTO;
 import com.learning.dscatalog.entities.PasswordRecover;
 import com.learning.dscatalog.entities.User;
 import com.learning.dscatalog.repositories.PasswordRecoverRepository;
@@ -33,6 +36,9 @@ public class AuthService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public void createRecoverToken(EmailDTO dto) {
 
@@ -53,6 +59,19 @@ public class AuthService {
 
         emailService.sendEmail(dto.getEmail(), "Password Recovery", body);
 
+    }
+
+    @Transactional
+    public void createNewPassword(NewPasswordDTO dto) {
+        
+        List<PasswordRecover> result = passwordRecoverRepository.searchValidToken(dto.getToken(), Instant.now());
+        if(result.size() == 0)
+            throw new ResourceNotFoundException("Invalid token");
+
+        User user = userRepository.findByEmail(result.get(0).getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+
+        user = userRepository.save(user);
     }
 
 }

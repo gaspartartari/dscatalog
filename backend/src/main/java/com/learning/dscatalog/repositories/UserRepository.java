@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.learning.dscatalog.entities.Role;
 import com.learning.dscatalog.entities.User;
 import com.learning.dscatalog.projections.UserDetailsProjection;
 
