@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.learning.dscatalog.DTO.CustomError;
 import com.learning.dscatalog.DTO.ValidationError;
 import com.learning.dscatalog.services.exceptions.DatabaseException;
+import com.learning.dscatalog.services.exceptions.EmailException;
 import com.learning.dscatalog.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +39,13 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<CustomError> databaseException (DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST; 
+        CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    } 
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<CustomError> emailException (EmailException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST; 
         CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
