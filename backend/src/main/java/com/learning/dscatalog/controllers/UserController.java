@@ -66,5 +66,12 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
+    @GetMapping(value = "/me")
+    public ResponseEntity<UserDTO> getUserLogged(){
+        UserDTO user = userService.getUserLogged();
+        return ResponseEntity.ok(user);
+    }
      
 }
